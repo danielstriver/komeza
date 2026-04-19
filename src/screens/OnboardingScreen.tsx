@@ -124,7 +124,7 @@ export default function OnboardingScreen() {
               </motion.div>
 
               <h2 className="text-3xl font-bold mb-3" style={{ color: '#fff' }}>
-                {t.en.selectLanguage || 'Choose your language'}
+                {tr.onboarding2Title}
               </h2>
               <p className="text-sm mb-10" style={{ color: 'rgba(255,255,255,0.6)' }}>
                 {t.en.onboarding2Sub}

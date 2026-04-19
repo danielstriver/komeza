@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { useApp } from '../context/AppContext';
-import { t } from '../lib/i18n';
 
 const FEATURES = [
   {
@@ -28,7 +27,6 @@ const FEATURES = [
 export default function DesktopLayout({ children }: { children: React.ReactNode }) {
   const { state, dispatch } = useApp();
   const { language, screen } = state;
-  const tr = t[language];
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: '#EAE6DF' }}>

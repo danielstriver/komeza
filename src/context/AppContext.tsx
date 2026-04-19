@@ -87,7 +87,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       ...initialState,
       language,
       hasOnboarded: onboarded,
-      screen: onboarded ? 'home' : 'onboarding',
+      screen: (onboarded ? 'home' : 'onboarding') as AppState['screen'],
       entries,
       chatHistory,
     };
