@@ -29,6 +29,7 @@ export interface AppState {
   chatHistory: ChatMessage[];
   currentRatings: Partial<SomaticRatings>;
   crisisDetected: boolean;
+  darkMode: boolean;
 }
 
 export type AppAction =
@@ -41,4 +42,5 @@ export type AppAction =
   | { type: 'CLEAR_CHAT' }
   | { type: 'TRIGGER_CRISIS' }
   | { type: 'DISMISS_CRISIS' }
-  | { type: 'LOAD_ENTRIES'; payload: WellnessEntry[] };
+  | { type: 'LOAD_ENTRIES'; payload: WellnessEntry[] }
+  | { type: 'TOGGLE_DARK_MODE' };

@@ -26,13 +26,13 @@ export default function BottomNav() {
       style={{ maxWidth: 430, zIndex: 50 }}
     >
       <div
-        className="w-full flex items-center justify-around px-2 pt-2 pb-5"
+        className="w-full flex items-center justify-around px-2 pt-2 pb-5 transition-colors"
         style={{
-          background: 'rgba(255,255,255,0.92)',
+          background: 'var(--bg-nav)',
           backdropFilter: 'blur(24px)',
           WebkitBackdropFilter: 'blur(24px)',
-          borderTop: '1px solid rgba(0,0,0,0.06)',
-          boxShadow: '0 -2px 30px rgba(0,0,0,0.08)',
+          borderTop: '1px solid var(--border-2)',
+          boxShadow: 'var(--shadow-nav)',
         }}
       >
         {NAV_ITEMS.map((item) => {
@@ -45,7 +45,6 @@ export default function BottomNav() {
               whileTap={{ scale: 0.88 }}
               transition={{ type: 'spring', stiffness: 500, damping: 30 }}
             >
-              {/* Active pill background */}
               {active && (
                 <motion.div
                   layoutId="nav-active-bg"
@@ -55,7 +54,6 @@ export default function BottomNav() {
                 />
               )}
 
-              {/* Active indicator dot */}
               {active && (
                 <motion.div
                   layoutId="nav-dot"
@@ -65,7 +63,6 @@ export default function BottomNav() {
                 />
               )}
 
-              {/* Icon */}
               <motion.span
                 className="relative z-10 text-[22px] leading-none mt-1.5"
                 animate={active ? { y: [-2, 0] } : { y: 0 }}
@@ -74,10 +71,9 @@ export default function BottomNav() {
                 {active ? item.activeEmoji : item.emoji}
               </motion.span>
 
-              {/* Label */}
               <span
                 className="relative z-10 text-[10px] font-semibold transition-colors leading-none"
-                style={{ color: active ? '#1a4731' : '#A0AEC0' }}
+                style={{ color: active ? '#1a4731' : 'var(--text-3)' }}
               >
                 {tr[item.key]}
               </span>

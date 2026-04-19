@@ -5,6 +5,7 @@ const KEYS = {
   chatHistory: 'komeza_chat',
   onboarded: 'komeza_onboarded',
   language: 'komeza_language',
+  darkMode: 'komeza_dark',
 };
 
 export function loadEntries(): WellnessEntry[] {
@@ -50,6 +51,14 @@ export function loadLanguage(): 'en' | 'rw' {
 
 export function saveLanguage(lang: 'en' | 'rw'): void {
   localStorage.setItem(KEYS.language, lang);
+}
+
+export function loadDarkMode(): boolean {
+  return localStorage.getItem(KEYS.darkMode) === 'true';
+}
+
+export function saveDarkMode(dark: boolean): void {
+  localStorage.setItem(KEYS.darkMode, String(dark));
 }
 
 // Demo entries for a rich first-open experience

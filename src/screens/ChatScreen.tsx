@@ -60,7 +60,6 @@ export default function ChatScreen() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  // Voice — inject transcript into input field
   const handleFinalTranscript = useCallback((text: string) => {
     setInput((prev) => (prev ? prev + ' ' + text : text));
     inputRef.current?.focus();
@@ -68,7 +67,6 @@ export default function ChatScreen() {
 
   const voice = useVoice(language, handleFinalTranscript);
 
-  // Auto-open with AI greeting on first chat
   useEffect(() => {
     if (!hasOpened && chatHistory.length === 0) {
       setHasOpened(true);
@@ -90,13 +88,6 @@ export default function ChatScreen() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatHistory, isLoading]);
-
-  // Keep interim voice transcript visible in input
-  useEffect(() => {
-    if (voice.interimTranscript) {
-      // Don't overwrite real input with interim, just show below
-    }
-  }, [voice.interimTranscript]);
 
   async function handleSend(textOverride?: string) {
     const text = (textOverride ?? input).trim();
@@ -162,7 +153,6 @@ export default function ChatScreen() {
   }
 
   const apiKey = import.meta.env.VITE_ANTHROPIC_API_KEY;
-
   const activeInput = input || (voice.isListening ? voice.interimTranscript : '');
 
   return (
@@ -194,12 +184,11 @@ export default function ChatScreen() {
         </div>
 
         <div className="flex items-center gap-2">
-          {/* Speak responses toggle */}
           {'speechSynthesis' in window && (
             <button
               onClick={() => { setSpeakResponses((v) => !v); stopSpeaking(); }}
               title={speakResponses ? 'Mute responses' : 'Speak responses aloud'}
-              className="w-9 h-9 rounded-xl flex items-center justify-center transition-all"
+              className="w-9 h-9 rounded-xl flex items-center justify-center transition-all hover:scale-110"
               style={{
                 background: speakResponses ? 'rgba(233,167,32,0.25)' : 'rgba(255,255,255,0.08)',
                 border: speakResponses ? '1px solid rgba(233,167,32,0.4)' : '1px solid transparent',
@@ -209,10 +198,9 @@ export default function ChatScreen() {
             </button>
           )}
 
-          {/* Language toggle */}
           <button
             onClick={() => dispatch({ type: 'SET_LANGUAGE', payload: language === 'en' ? 'rw' : 'en' })}
-            className="px-3 py-1.5 rounded-xl text-xs font-semibold"
+            className="px-3 py-1.5 rounded-xl text-xs font-semibold transition-all hover:opacity-80"
             style={{ background: 'rgba(255,255,255,0.1)', color: '#74C69D' }}
           >
             {language === 'en' ? '🇷🇼 RW' : '🇬🇧 EN'}
@@ -233,7 +221,7 @@ export default function ChatScreen() {
       )}
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-5 space-y-4" style={{ background: '#F7F4EF' }}>
+      <div className="flex-1 overflow-y-auto px-4 py-5 space-y-4" style={{ background: 'var(--bg-app)' }}>
         <AnimatePresence initial={false}>
           {chatHistory.map((msg, idx) => (
             <motion.div
@@ -259,20 +247,19 @@ export default function ChatScreen() {
                         boxShadow: '0 4px 16px rgba(26,71,49,0.25)',
                       }
                     : {
-                        background: '#fff',
-                        color: '#1C2B2B',
+                        background: 'var(--bg-card)',
+                        color: 'var(--text-1)',
                         borderRadius: '20px 20px 20px 6px',
-                        boxShadow: '0 2px 16px rgba(0,0,0,0.07)',
+                        boxShadow: 'var(--shadow-card)',
                       }
                 }
               >
                 {msg.content}
-                {/* Speak button on AI messages */}
                 {msg.role === 'assistant' && 'speechSynthesis' in window && (
                   <button
                     onClick={() => speak(msg.content, language)}
                     className="absolute -bottom-2 right-2 w-6 h-6 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs"
-                    style={{ background: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.12)' }}
+                    style={{ background: 'var(--bg-card)', boxShadow: '0 2px 8px rgba(0,0,0,0.12)' }}
                     title="Read aloud"
                   >
                     🔊
@@ -297,7 +284,7 @@ export default function ChatScreen() {
             <div className="w-8 h-8 rounded-[14px] flex items-center justify-center text-base shrink-0" style={{ background: '#1a4731' }}>
               🌿
             </div>
-            <div className="px-4 py-3.5 rounded-3xl" style={{ background: '#fff', boxShadow: '0 2px 16px rgba(0,0,0,0.07)', borderBottomLeftRadius: 6 }}>
+            <div className="px-4 py-3.5 rounded-3xl" style={{ background: 'var(--bg-card)', boxShadow: 'var(--shadow-card)', borderBottomLeftRadius: 6 }}>
               <TypingDots />
             </div>
           </motion.div>
@@ -314,14 +301,14 @@ export default function ChatScreen() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             className="mx-4 mb-2 px-5 py-4 rounded-2xl flex flex-col items-center gap-2 shrink-0"
-            style={{ background: '#fff', boxShadow: '0 4px 20px rgba(233,53,122,0.15)', border: '1.5px solid #E9357A20' }}
+            style={{ background: 'var(--bg-card)', boxShadow: '0 4px 20px rgba(233,53,122,0.15)', border: '1.5px solid #E9357A20' }}
           >
             <VoicePulse />
             <p className="text-xs font-semibold mt-1" style={{ color: '#E9357A' }}>
               {language === 'rw' ? 'Iri kumva — vuga...' : 'Listening — speak now...'}
             </p>
             {voice.interimTranscript && (
-              <p className="text-xs text-center italic" style={{ color: '#9CA3AF' }}>
+              <p className="text-xs text-center italic" style={{ color: 'var(--text-3)' }}>
                 "{voice.interimTranscript}"
               </p>
             )}
@@ -346,11 +333,10 @@ export default function ChatScreen() {
 
       {/* Input bar */}
       <div
-        className="shrink-0 px-4 pt-3 pb-4"
-        style={{ background: '#fff', borderTop: '1px solid #F0EBE3' }}
+        className="shrink-0 px-4 pt-3 pb-4 transition-colors"
+        style={{ background: 'var(--bg-card)', borderTop: '1px solid var(--border-2)' }}
       >
         <div className="flex gap-2.5 items-end">
-          {/* Voice button */}
           {voice.isSupported && (
             <motion.button
               whileTap={{ scale: 0.88 }}
@@ -359,8 +345,8 @@ export default function ChatScreen() {
               style={{
                 background: voice.isListening
                   ? 'linear-gradient(135deg, #E9357A, #C2185B)'
-                  : '#F7F4EF',
-                border: voice.isListening ? 'none' : '1.5px solid #E5DDD4',
+                  : 'var(--bg-muted)',
+                border: voice.isListening ? 'none' : `1.5px solid var(--border-1)`,
                 boxShadow: voice.isListening ? '0 4px 16px rgba(233,53,122,0.35)' : 'none',
               }}
               animate={voice.isListening ? { scale: [1, 1.06, 1] } : {}}
@@ -368,17 +354,16 @@ export default function ChatScreen() {
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                 <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"
-                  fill={voice.isListening ? 'white' : '#6B7575'} />
+                  fill={voice.isListening ? 'white' : 'var(--text-2)'} />
                 <path d="M19 10v2a7 7 0 0 1-14 0v-2"
-                  stroke={voice.isListening ? 'white' : '#6B7575'}
+                  stroke={voice.isListening ? 'white' : 'var(--text-2)'}
                   strokeWidth="2" strokeLinecap="round" />
-                <line x1="12" y1="19" x2="12" y2="23" stroke={voice.isListening ? 'white' : '#6B7575'} strokeWidth="2" strokeLinecap="round" />
-                <line x1="8" y1="23" x2="16" y2="23" stroke={voice.isListening ? 'white' : '#6B7575'} strokeWidth="2" strokeLinecap="round" />
+                <line x1="12" y1="19" x2="12" y2="23" stroke={voice.isListening ? 'white' : 'var(--text-2)'} strokeWidth="2" strokeLinecap="round" />
+                <line x1="8" y1="23" x2="16" y2="23" stroke={voice.isListening ? 'white' : 'var(--text-2)'} strokeWidth="2" strokeLinecap="round" />
               </svg>
             </motion.button>
           )}
 
-          {/* Text input */}
           <textarea
             ref={inputRef}
             value={input}
@@ -390,9 +375,9 @@ export default function ChatScreen() {
             rows={1}
             className="flex-1 resize-none rounded-2xl px-4 py-3 text-sm outline-none transition-all"
             style={{
-              background: voice.isListening ? '#FFF5F8' : '#F7F4EF',
-              color: '#1C2B2B',
-              border: `1.5px solid ${voice.isListening ? '#E9357A40' : '#E5DDD4'}`,
+              background: voice.isListening ? '#FFF5F8' : 'var(--bg-input)',
+              color: 'var(--text-1)',
+              border: `1.5px solid ${voice.isListening ? '#E9357A40' : 'var(--border-1)'}`,
               maxHeight: 100,
               lineHeight: 1.55,
             }}
@@ -403,27 +388,27 @@ export default function ChatScreen() {
             }}
           />
 
-          {/* Send button */}
           <motion.button
             whileTap={{ scale: 0.88 }}
+            whileHover={activeInput.trim() && !isLoading ? { scale: 1.05 } : {}}
             onClick={() => handleSend()}
             disabled={!activeInput.trim() || isLoading}
             className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 transition-all"
             style={{
               background: activeInput.trim() && !isLoading
                 ? 'linear-gradient(135deg, #1a4731, #2d6a4f)'
-                : '#E5E7EB',
+                : 'var(--bg-muted)',
               boxShadow: activeInput.trim() ? '0 4px 16px rgba(26,71,49,0.3)' : 'none',
             }}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-              <path d="M22 2L11 13" stroke={activeInput.trim() ? '#fff' : '#9CA3AF'} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke={activeInput.trim() ? '#fff' : '#9CA3AF'} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M22 2L11 13" stroke={activeInput.trim() ? '#fff' : 'var(--text-3)'} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke={activeInput.trim() ? '#fff' : 'var(--text-3)'} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </motion.button>
         </div>
 
-        <p className="text-center text-xs mt-2" style={{ color: '#C0B8AF' }}>
+        <p className="text-center text-xs mt-2" style={{ color: 'var(--text-4)' }}>
           {voice.isSupported
             ? (language === 'rw' ? 'Kanda 🎙 uvuge, cyangwa wandike' : 'Tap 🎙 to speak, or type freely')
             : tr.voiceHint}

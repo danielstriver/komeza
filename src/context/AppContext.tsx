@@ -3,6 +3,7 @@ import type { AppState, AppAction, SomaticRatings, WellnessEntry } from '../type
 import {
   loadEntries, saveEntry, loadChatHistory, saveChatHistory,
   loadOnboarded, saveOnboarded, loadLanguage, saveLanguage,
+  loadDarkMode, saveDarkMode,
 } from '../lib/storage';
 
 const initialState: AppState = {
@@ -13,6 +14,7 @@ const initialState: AppState = {
   chatHistory: [],
   currentRatings: {},
   crisisDetected: false,
+  darkMode: false,
 };
 
 function reducer(state: AppState, action: AppAction): AppState {
@@ -67,6 +69,12 @@ function reducer(state: AppState, action: AppAction): AppState {
     case 'LOAD_ENTRIES':
       return { ...state, entries: action.payload };
 
+    case 'TOGGLE_DARK_MODE': {
+      const newDark = !state.darkMode;
+      saveDarkMode(newDark);
+      return { ...state, darkMode: newDark };
+    }
+
     default:
       return state;
   }
@@ -83,6 +91,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const language = loadLanguage();
     const entries = loadEntries();
     const chatHistory = loadChatHistory();
+    const darkMode = loadDarkMode();
     return {
       ...initialState,
       language,
@@ -90,8 +99,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       screen: (onboarded ? 'home' : 'onboarding') as AppState['screen'],
       entries,
       chatHistory,
+      darkMode,
     };
   });
+
+  // Sync data-theme attribute on <html> whenever darkMode changes
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', state.darkMode ? 'dark' : 'light');
+  }, [state.darkMode]);
 
   // Keep entries in sync
   useEffect(() => {

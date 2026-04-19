@@ -108,7 +108,7 @@ export default function InsightsScreen() {
   ];
 
   return (
-    <div className="flex-1 overflow-y-auto" style={{ background: '#F7F4EF', paddingBottom: '90px' }}>
+    <div className="flex-1 overflow-y-auto" style={{ background: 'var(--bg-app)', paddingBottom: '90px' }}>
       {/* Header */}
       <div
         className="px-6 pt-14 pb-6"
@@ -125,23 +125,23 @@ export default function InsightsScreen() {
       {entries.length < 2 ? (
         <div className="flex-1 flex flex-col items-center justify-center px-8 py-20 text-center">
           <div className="text-5xl mb-4">📊</div>
-          <p className="text-base" style={{ color: '#6B7575' }}>{tr.noDataYet}</p>
+          <p className="text-base" style={{ color: 'var(--text-2)' }}>{tr.noDataYet}</p>
         </div>
       ) : (
         <div className="px-4 py-5 space-y-5">
-          {/* 7-day stats */}
+          {/* 7-day stat pills */}
           <div className="grid grid-cols-4 gap-3">
             {stats.map((s) => (
               <motion.div
                 key={s.label}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="rounded-2xl p-3 text-center"
-                style={{ background: '#fff', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}
+                className="rounded-2xl p-3 text-center transition-transform hover:scale-105"
+                style={{ background: 'var(--bg-card)', boxShadow: 'var(--shadow-card)' }}
               >
                 <div className="text-xl mb-1">{s.emoji}</div>
                 <div className="text-lg font-bold" style={{ color: s.color }}>{s.value}</div>
-                <div className="text-xs mt-0.5" style={{ color: '#9CA3AF' }}>{s.label}</div>
+                <div className="text-xs mt-0.5" style={{ color: 'var(--text-3)' }}>{s.label}</div>
               </motion.div>
             ))}
           </div>
@@ -152,11 +152,11 @@ export default function InsightsScreen() {
               <button
                 key={d}
                 onClick={() => setDays(d)}
-                className="px-4 py-2 rounded-xl text-sm font-semibold transition-all"
+                className="px-4 py-2 rounded-xl text-sm font-semibold transition-all hover:opacity-80"
                 style={{
-                  background: days === d ? '#1a4731' : '#fff',
-                  color: days === d ? '#fff' : '#6B7575',
-                  border: `1.5px solid ${days === d ? '#1a4731' : '#E5DDD4'}`,
+                  background: days === d ? '#1a4731' : 'var(--bg-card)',
+                  color: days === d ? '#fff' : 'var(--text-2)',
+                  border: `1.5px solid ${days === d ? '#1a4731' : 'var(--border-1)'}`,
                 }}
               >
                 {d === 7 ? tr.last7days : tr.last30days}
@@ -166,8 +166,8 @@ export default function InsightsScreen() {
 
           {/* Chart */}
           {data.length > 1 && (
-            <div className="rounded-3xl p-4" style={{ background: '#fff', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-              <p className="text-sm font-semibold mb-4" style={{ color: '#1C2B2B' }}>
+            <div className="rounded-3xl p-4" style={{ background: 'var(--bg-card)', boxShadow: 'var(--shadow-card)' }}>
+              <p className="text-sm font-semibold mb-4" style={{ color: 'var(--text-1)' }}>
                 {language === 'rw' ? 'Imiterere yo mu minsi' : 'Daily Trends'}
               </p>
               <ResponsiveContainer width="100%" height={200}>
@@ -180,12 +180,12 @@ export default function InsightsScreen() {
                       </linearGradient>
                     ))}
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#F0EBE3" />
-                  <XAxis dataKey="date" tick={{ fontSize: 10, fill: '#9CA3AF' }} tickLine={false} axisLine={false} />
-                  <YAxis domain={[0, 5]} ticks={[1, 2, 3, 4, 5]} tick={{ fontSize: 10, fill: '#9CA3AF' }} tickLine={false} axisLine={false} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border-2)" />
+                  <XAxis dataKey="date" tick={{ fontSize: 10, fill: 'var(--text-3)' }} tickLine={false} axisLine={false} />
+                  <YAxis domain={[0, 5]} ticks={[1, 2, 3, 4, 5]} tick={{ fontSize: 10, fill: 'var(--text-3)' }} tickLine={false} axisLine={false} />
                   <Tooltip
-                    contentStyle={{ background: '#fff', border: '1px solid #F0EBE3', borderRadius: 12, fontSize: 12 }}
-                    labelStyle={{ color: '#1C2B2B', fontWeight: 600 }}
+                    contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-2)', borderRadius: 12, fontSize: 12, color: 'var(--text-1)' }}
+                    labelStyle={{ color: 'var(--text-1)', fontWeight: 600 }}
                   />
                   {SERIES.map((s) => (
                     <Area
@@ -208,7 +208,7 @@ export default function InsightsScreen() {
                 {SERIES.map((s) => (
                   <div key={s.key} className="flex items-center gap-1.5">
                     <div className="w-3 h-3 rounded-full" style={{ background: s.color }} />
-                    <span className="text-xs" style={{ color: '#6B7575' }}>
+                    <span className="text-xs" style={{ color: 'var(--text-2)' }}>
                       {language === 'rw' ? s.label_rw : s.label_en}
                     </span>
                   </div>
@@ -219,8 +219,8 @@ export default function InsightsScreen() {
 
           {/* Pattern observations */}
           {observations.length > 0 && (
-            <div className="rounded-3xl p-5" style={{ background: '#fff', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-              <p className="text-sm font-semibold mb-4" style={{ color: '#1C2B2B' }}>
+            <div className="rounded-3xl p-5" style={{ background: 'var(--bg-card)', boxShadow: 'var(--shadow-card)' }}>
+              <p className="text-sm font-semibold mb-4" style={{ color: 'var(--text-1)' }}>
                 {tr.patternTitle}
               </p>
               <div className="space-y-3">
@@ -231,7 +231,7 @@ export default function InsightsScreen() {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: i * 0.1 }}
                     className="text-sm leading-relaxed py-3 px-4 rounded-2xl"
-                    style={{ background: '#F7F4EF', color: '#374151' }}
+                    style={{ background: 'var(--bg-app)', color: 'var(--text-1)' }}
                   >
                     {obs}
                   </motion.div>

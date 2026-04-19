@@ -59,13 +59,14 @@ export default function BriefScreen() {
   const hasData = week.length >= 3;
 
   return (
-    <div className="flex-1 overflow-y-auto" style={{ background: '#F7F4EF', paddingBottom: '90px' }}>
+    <div className="flex-1 overflow-y-auto" style={{ background: 'var(--bg-app)', paddingBottom: '90px' }}>
       {/* Header */}
       <div
         className="px-6 pt-14 pb-6 relative overflow-hidden"
         style={{ background: 'linear-gradient(140deg, #0d2e1c, #1a4731)' }}
       >
-        <div className="absolute top-0 right-0 w-32 h-32 rounded-full opacity-10" style={{ background: 'radial-gradient(circle, #E9A720, transparent)', transform: 'translate(30%, -30%)' }} />
+        <div className="absolute top-0 right-0 w-32 h-32 rounded-full opacity-10"
+          style={{ background: 'radial-gradient(circle, #E9A720, transparent)', transform: 'translate(30%, -30%)' }} />
         <h1 className="text-2xl font-bold mb-1" style={{ color: '#fff' }}>{tr.briefTitle}</h1>
         <p className="text-sm" style={{ color: 'rgba(255,255,255,0.6)' }}>{tr.briefSub}</p>
         {week.length > 0 && (
@@ -79,10 +80,10 @@ export default function BriefScreen() {
         {!hasData ? (
           <div className="text-center py-16">
             <div className="text-5xl mb-4">📄</div>
-            <p className="text-base mb-2 font-semibold" style={{ color: '#1C2B2B' }}>
+            <p className="text-base mb-2 font-semibold" style={{ color: 'var(--text-1)' }}>
               {language === 'rw' ? 'Nta makuru ahagije' : 'Not enough data yet'}
             </p>
-            <p className="text-sm" style={{ color: '#6B7575' }}>
+            <p className="text-sm" style={{ color: 'var(--text-2)' }}>
               {language === 'rw' ? 'Injira iminsi 3 kugirango ubone raporo yawe.' : 'Check in for at least 3 days to generate your brief.'}
             </p>
           </div>
@@ -95,12 +96,12 @@ export default function BriefScreen() {
                   key={s.label}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="rounded-3xl p-4 flex items-center gap-4"
-                  style={{ background: '#fff', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}
+                  className="rounded-3xl p-4 flex items-center gap-4 transition-transform hover:scale-[1.02]"
+                  style={{ background: 'var(--bg-card)', boxShadow: 'var(--shadow-card)' }}
                 >
                   <ScoreBadge value={s.value} color={s.color} />
                   <div>
-                    <p className="text-xs" style={{ color: '#9CA3AF' }}>{s.label}</p>
+                    <p className="text-xs" style={{ color: 'var(--text-3)' }}>{s.label}</p>
                     <p className="text-2xl">{s.emoji}</p>
                   </div>
                 </motion.div>
@@ -108,11 +109,11 @@ export default function BriefScreen() {
             </div>
 
             {/* What this means */}
-            <div className="rounded-3xl p-5" style={{ background: '#fff', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-              <p className="font-semibold text-sm mb-4" style={{ color: '#1C2B2B' }}>
+            <div className="rounded-3xl p-5" style={{ background: 'var(--bg-card)', boxShadow: 'var(--shadow-card)' }}>
+              <p className="font-semibold text-sm mb-4" style={{ color: 'var(--text-1)' }}>
                 {language === 'rw' ? 'Ibi bisobanura iki?' : 'What this means'}
               </p>
-              <div className="space-y-3 text-sm" style={{ color: '#374151' }}>
+              <div className="space-y-3 text-sm" style={{ color: 'var(--text-1)' }}>
                 {parseFloat(avg(energies)) < 3 && (
                   <p>⚡ {language === 'rw' ? 'Imbaraga zari nke cyane. Amahugurwa n\'imiturire birashobora kufasha.' : 'Energy has been consistently below average. Rest and nutrition are worth reviewing.'}</p>
                 )}
@@ -132,16 +133,16 @@ export default function BriefScreen() {
             </div>
 
             {/* Recent log preview */}
-            <div className="rounded-3xl p-5" style={{ background: '#fff', boxShadow: '0 2px 12px rgba(0,0,0,0.04)' }}>
-              <p className="font-semibold text-sm mb-4" style={{ color: '#1C2B2B' }}>
+            <div className="rounded-3xl p-5" style={{ background: 'var(--bg-card)', boxShadow: 'var(--shadow-card)' }}>
+              <p className="font-semibold text-sm mb-4" style={{ color: 'var(--text-1)' }}>
                 {language === 'rw' ? 'Ibyanditswe 7 bishize' : 'Last 7 check-ins'}
               </p>
               <div className="space-y-2">
                 {week.map((entry) => {
                   const label = new Date(entry.date + 'T12:00:00').toLocaleDateString('en-RW', { weekday: 'short', month: 'short', day: 'numeric' });
                   return (
-                    <div key={entry.id} className="flex items-center justify-between text-xs py-2 px-3 rounded-xl" style={{ background: '#F7F4EF' }}>
-                      <span style={{ color: '#6B7575', width: 80 }}>{label}</span>
+                    <div key={entry.id} className="flex items-center justify-between text-xs py-2 px-3 rounded-xl" style={{ background: 'var(--bg-app)' }}>
+                      <span style={{ color: 'var(--text-2)', width: 80 }}>{label}</span>
                       <div className="flex gap-3">
                         <span style={{ color: '#FF8C42' }}>⚡{entry.ratings.energy}</span>
                         <span style={{ color: '#7C5CBF' }}>🌙{entry.ratings.sleep}</span>
@@ -162,6 +163,7 @@ export default function BriefScreen() {
             {/* Download button */}
             <motion.button
               whileTap={{ scale: 0.97 }}
+              whileHover={{ scale: 1.01 }}
               onClick={handleDownload}
               disabled={generating}
               className="w-full py-4 rounded-2xl text-base font-bold transition-all flex items-center justify-center gap-3"
@@ -173,13 +175,9 @@ export default function BriefScreen() {
               }}
             >
               {generating ? (
-                <>
-                  <span className="animate-spin">⏳</span> {tr.generating}
-                </>
+                <><span className="animate-spin">⏳</span> {tr.generating}</>
               ) : (
-                <>
-                  📄 {tr.downloadPDF}
-                </>
+                <>📄 {tr.downloadPDF}</>
               )}
             </motion.button>
           </>

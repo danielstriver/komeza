@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* ============================================================
+   BRAND + LIGHT THEME (default)
+============================================================ */
 :root {
   --brand-dark:    #0d2e1c;
   --brand-primary: #1a4731;
@@ -7,12 +10,60 @@
   --brand-accent:  #52b788;
   --brand-light:   #d8f3dc;
   --gold:          #e9a720;
-  --cream:         #f7f4ef;
-  --text-dark:     #1c2b2b;
-  --text-gray:     #6b7575;
+
+  --bg-app:            #F7F4EF;
+  --bg-card:           #ffffff;
+  --bg-input:          #F7F4EF;
+  --bg-muted:          #F0EBE3;
+  --bg-nav:            rgba(255,255,255,0.92);
+  --bg-desktop:        #EAE6DF;
+  --bg-desktop-header: rgba(255,255,255,0.90);
+  --bg-desktop-border: rgba(0,0,0,0.07);
+  --bg-disabled:       #E5E7EB;
+
+  --text-1: #1C2B2B;
+  --text-2: #6B7575;
+  --text-3: #9CA3AF;
+  --text-4: #B0A99F;
+
+  --border-1: #E5DDD4;
+  --border-2: #F0EBE3;
+
+  --shadow-card:    0 2px 12px rgba(0,0,0,0.05);
+  --shadow-card-lg: 0 4px 24px rgba(0,0,0,0.08);
+  --shadow-nav:     0 -2px 30px rgba(0,0,0,0.08);
 }
 
-/* === RESET === */
+/* ============================================================
+   DARK THEME
+============================================================ */
+[data-theme="dark"] {
+  --bg-app:            #111827;
+  --bg-card:           #1F2937;
+  --bg-input:          #1F2937;
+  --bg-muted:          #374151;
+  --bg-nav:            rgba(17,24,39,0.97);
+  --bg-desktop:        #0c1220;
+  --bg-desktop-header: rgba(17,24,39,0.95);
+  --bg-desktop-border: rgba(255,255,255,0.08);
+  --bg-disabled:       #374151;
+
+  --text-1: #F3F4F6;
+  --text-2: #9CA3AF;
+  --text-3: #6B7280;
+  --text-4: #4B5563;
+
+  --border-1: #374151;
+  --border-2: #2D3748;
+
+  --shadow-card:    0 2px 12px rgba(0,0,0,0.35);
+  --shadow-card-lg: 0 4px 24px rgba(0,0,0,0.45);
+  --shadow-nav:     0 -2px 30px rgba(0,0,0,0.45);
+}
+
+/* ============================================================
+   RESET
+============================================================ */
 *, *::before, *::after {
   box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
@@ -25,38 +76,57 @@ html, body {
   overflow-x: hidden;
 }
 
-/* === BODY === */
+/* ============================================================
+   BODY
+============================================================ */
 body {
-  /* Warm earthy desktop background */
-  background: #EAE6DF;
+  background: var(--bg-desktop);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
     "Segoe UI", system-ui, Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
+  transition: background 0.25s ease, color 0.25s ease;
 }
 
-/* === ROOT === */
+/* ============================================================
+   ROOT
+============================================================ */
 #root {
   min-height: 100dvh;
   width: 100%;
 }
 
-/* === TYPOGRAPHY === */
+/* ============================================================
+   TYPOGRAPHY
+============================================================ */
 ::selection {
   background: #d8f3dc;
   color: #1a4731;
 }
 
-/* === SCROLLBARS === */
+/* ============================================================
+   CURSOR — every interactive element gets a pointer
+============================================================ */
+button,
+[role="button"],
+a {
+  cursor: pointer;
+}
+
+/* ============================================================
+   SCROLLBARS
+============================================================ */
 ::-webkit-scrollbar { display: none; }
 * { scrollbar-width: none; }
 
-/* === FORMS === */
+/* ============================================================
+   FORMS
+============================================================ */
 input:-webkit-autofill,
 textarea:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 100px #f7f4ef inset;
-  -webkit-text-fill-color: #1c2b2b;
+  -webkit-box-shadow: 0 0 0 100px var(--bg-input) inset;
+  -webkit-text-fill-color: var(--text-1);
 }
 
 /* Prevent iOS zoom on input focus */
@@ -64,7 +134,9 @@ input, textarea, select {
   font-size: 16px;
 }
 
-/* === FOCUS === */
+/* ============================================================
+   FOCUS
+============================================================ */
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
@@ -74,31 +146,35 @@ textarea:focus-visible {
   border-radius: 8px;
 }
 
-/* === SAFE AREA === */
+/* ============================================================
+   SAFE AREA
+============================================================ */
 .pb-safe {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-/* === SMOOTH SCROLL === */
-html { scroll-behavior: smooth; }
-
-/* === TEXT SIZE ADJUST === */
+/* ============================================================
+   SMOOTH SCROLL + TEXT SIZE
+============================================================ */
 html {
+  scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
 
-/* === ANIMATIONS === */
+/* ============================================================
+   ANIMATIONS
+============================================================ */
 @keyframes shimmer {
   from { transform: translateX(-100%); }
   to   { transform: translateX(200%);  }
 }
 
-/* === DESKTOP FRAME === */
-/* On md+ screens, the app frame is a centered card with device-like styling */
+/* ============================================================
+   DESKTOP FRAME
+============================================================ */
 @media (min-width: 768px) {
   body {
-    /* Subtle topographic pattern using SVG */
     background-image:
       radial-gradient(circle at 20% 50%, rgba(26,71,49,0.04) 0%, transparent 60%),
       radial-gradient(circle at 80% 20%, rgba(233,167,32,0.04) 0%, transparent 60%),

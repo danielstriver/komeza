@@ -26,17 +26,17 @@ const FEATURES = [
 
 export default function DesktopLayout({ children }: { children: React.ReactNode }) {
   const { state, dispatch } = useApp();
-  const { language, screen } = state;
+  const { language, screen, darkMode } = state;
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: '#EAE6DF' }}>
+    <div className="min-h-screen flex flex-col" style={{ background: 'var(--bg-desktop)' }}>
       {/* === DESKTOP NAVBAR === */}
       <header
-        className="hidden md:flex items-center justify-between px-10 py-4 sticky top-0 z-50"
+        className="hidden md:flex items-center justify-between px-10 py-4 sticky top-0 z-50 transition-colors"
         style={{
-          background: 'rgba(255,255,255,0.9)',
+          background: 'var(--bg-desktop-header)',
           backdropFilter: 'blur(20px)',
-          borderBottom: '1px solid rgba(0,0,0,0.07)',
+          borderBottom: '1px solid var(--bg-desktop-border)',
           boxShadow: '0 1px 20px rgba(0,0,0,0.06)',
         }}
       >
@@ -62,18 +62,18 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
         {/* Nav links */}
         <nav className="hidden lg:flex items-center gap-1">
           {[
-            { label: language === 'rw' ? 'Genzura' : 'Check-In',  scr: 'home'     as const },
-            { label: language === 'rw' ? 'Ikiganiro' : 'Chat',    scr: 'chat'     as const },
-            { label: language === 'rw' ? 'Imiterere' : 'Insights',scr: 'insights' as const },
-            { label: language === 'rw' ? 'Raporo' : 'Report',     scr: 'brief'    as const },
+            { label: language === 'rw' ? 'Genzura' : 'Check-In',   scr: 'home'     as const },
+            { label: language === 'rw' ? 'Ikiganiro' : 'Chat',      scr: 'chat'     as const },
+            { label: language === 'rw' ? 'Imiterere' : 'Insights',  scr: 'insights' as const },
+            { label: language === 'rw' ? 'Raporo' : 'Report',       scr: 'brief'    as const },
           ].map((item) => (
             <button
               key={item.scr}
               onClick={() => dispatch({ type: 'SET_SCREEN', payload: item.scr })}
-              className="px-4 py-2 rounded-xl text-sm font-semibold transition-all"
+              className="px-4 py-2 rounded-xl text-sm font-semibold transition-all hover:opacity-80"
               style={{
                 background: screen === item.scr ? '#1a473115' : 'transparent',
-                color: screen === item.scr ? '#1a4731' : '#6B7575',
+                color: screen === item.scr ? '#1a4731' : 'var(--text-2)',
               }}
             >
               {item.label}
@@ -82,7 +82,7 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
         </nav>
 
         {/* Right controls */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           {/* Crisis line */}
           <a
             href="tel:114"
@@ -93,11 +93,22 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
             <span>{language === 'rw' ? 'Ubufasha vuba: 114' : 'Crisis line: 114'}</span>
           </a>
 
+          {/* Dark mode toggle */}
+          <button
+            onClick={() => dispatch({ type: 'TOGGLE_DARK_MODE' })}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-semibold transition-all hover:scale-105"
+            style={{ background: 'var(--bg-muted)', color: 'var(--text-2)', border: '1px solid var(--border-1)' }}
+            title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            <span>{darkMode ? '☀️' : '🌙'}</span>
+            <span className="hidden lg:inline text-xs">{darkMode ? 'Light' : 'Dark'}</span>
+          </button>
+
           {/* Language toggle */}
           <button
             onClick={() => dispatch({ type: 'SET_LANGUAGE', payload: language === 'en' ? 'rw' : 'en' })}
             className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all hover:scale-105"
-            style={{ background: '#F7F4EF', color: '#1a4731', border: '1px solid #E5DDD4' }}
+            style={{ background: 'var(--bg-muted)', color: '#1a4731', border: '1px solid var(--border-1)' }}
           >
             <span>{language === 'en' ? '🇷🇼' : '🇬🇧'}</span>
             <span>{language === 'en' ? 'RW' : 'EN'}</span>
@@ -135,15 +146,15 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
           </div>
 
           {/* Features list */}
-          <div className="rounded-3xl p-5" style={{ background: '#fff', boxShadow: '0 2px 20px rgba(0,0,0,0.06)' }}>
-            <p className="text-xs font-bold uppercase tracking-wider mb-4" style={{ color: '#9CA3AF' }}>
+          <div className="rounded-3xl p-5" style={{ background: 'var(--bg-card)', boxShadow: 'var(--shadow-card)' }}>
+            <p className="text-xs font-bold uppercase tracking-wider mb-4" style={{ color: 'var(--text-3)' }}>
               {language === 'rw' ? 'Ibintu bishimishije' : 'Why it works'}
             </p>
             <div className="space-y-4">
               {FEATURES.map((f, i) => (
                 <div key={i} className="flex gap-3 items-start">
                   <span className="text-lg mt-0.5">{f.emoji}</span>
-                  <p className="text-xs leading-relaxed" style={{ color: '#4B5563' }}>
+                  <p className="text-xs leading-relaxed" style={{ color: 'var(--text-2)' }}>
                     {language === 'rw' ? f.rw : f.en}
                   </p>
                 </div>
@@ -152,8 +163,8 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
           </div>
 
           {/* Stats */}
-          <div className="rounded-3xl p-5" style={{ background: '#fff', boxShadow: '0 2px 20px rgba(0,0,0,0.06)' }}>
-            <p className="text-xs font-bold uppercase tracking-wider mb-4" style={{ color: '#9CA3AF' }}>
+          <div className="rounded-3xl p-5" style={{ background: 'var(--bg-card)', boxShadow: 'var(--shadow-card)' }}>
+            <p className="text-xs font-bold uppercase tracking-wider mb-4" style={{ color: 'var(--text-3)' }}>
               {language === 'rw' ? 'Ikibazo cyacu' : 'The gap we bridge'}
             </p>
             <div className="space-y-3">
@@ -164,7 +175,7 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
               ].map((s) => (
                 <div key={s.val} className="flex items-center justify-between">
                   <span className="text-xl font-black" style={{ color: '#E9A720' }}>{s.val}</span>
-                  <span className="text-xs text-right ml-3" style={{ color: '#6B7575', maxWidth: 130 }}>{s.label}</span>
+                  <span className="text-xs text-right ml-3" style={{ color: 'var(--text-2)', maxWidth: 130 }}>{s.label}</span>
                 </div>
               ))}
             </div>
@@ -177,7 +188,7 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
           style={{
             maxWidth: 430,
             minHeight: '100dvh',
-            background: '#F7F4EF',
+            background: 'var(--bg-app)',
             boxShadow: '0 0 0 1px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.18)',
           }}
         >
@@ -206,11 +217,11 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
           </a>
 
           {/* Privacy card */}
-          <div className="rounded-3xl p-5" style={{ background: '#fff', boxShadow: '0 2px 20px rgba(0,0,0,0.06)' }}>
-            <p className="text-xs font-bold uppercase tracking-wider mb-4" style={{ color: '#9CA3AF' }}>
+          <div className="rounded-3xl p-5" style={{ background: 'var(--bg-card)', boxShadow: 'var(--shadow-card)' }}>
+            <p className="text-xs font-bold uppercase tracking-wider mb-4" style={{ color: 'var(--text-3)' }}>
               {language === 'rw' ? 'Ubwisanzure & umutekano' : 'Privacy & safety'}
             </p>
-            <div className="space-y-3 text-xs" style={{ color: '#4B5563' }}>
+            <div className="space-y-3 text-xs" style={{ color: 'var(--text-2)' }}>
               {[
                 { icon: '🔒', text: language === 'rw' ? 'Amakuru ku gikoresho cyawe gusa' : 'Data stays on your device' },
                 { icon: '🚫', text: language === 'rw' ? 'Nta isuzuma rya muganga' : 'No medical diagnosis' },
@@ -226,29 +237,29 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
           </div>
 
           {/* Built with badge */}
-          <div className="rounded-2xl px-4 py-3 text-center" style={{ background: 'rgba(255,255,255,0.6)', border: '1px solid rgba(0,0,0,0.07)' }}>
-            <p className="text-xs" style={{ color: '#9CA3AF' }}>
+          <div className="rounded-2xl px-4 py-3 text-center" style={{ background: 'var(--bg-card)', border: '1px solid var(--border-1)' }}>
+            <p className="text-xs" style={{ color: 'var(--text-3)' }}>
               {language === 'rw' ? 'Yakozwe na' : 'Powered by'}
             </p>
             <p className="text-sm font-bold mt-1" style={{ color: '#1a4731' }}>Claude AI · Anthropic</p>
-            <p className="text-xs mt-1" style={{ color: '#9CA3AF' }}>Rwanda Hackathon 2025</p>
+            <p className="text-xs mt-1" style={{ color: 'var(--text-3)' }}>Rwanda Hackathon 2025</p>
           </div>
         </motion.aside>
       </main>
 
       {/* === DESKTOP FOOTER === */}
       <footer
-        className="hidden md:block px-10 py-6"
-        style={{ borderTop: '1px solid rgba(0,0,0,0.07)', background: 'rgba(255,255,255,0.6)' }}
+        className="hidden md:block px-10 py-6 transition-colors"
+        style={{ borderTop: '1px solid var(--bg-desktop-border)', background: 'var(--bg-desktop-header)' }}
       >
         <div className="flex items-center justify-between max-w-6xl mx-auto">
           <div className="flex items-center gap-3">
             <span className="text-sm font-black" style={{ color: '#1a4731' }}>KOMEZA</span>
-            <span className="text-xs" style={{ color: '#9CA3AF' }}>
+            <span className="text-xs" style={{ color: 'var(--text-3)' }}>
               © 2025 · AI Mental Wellness for Rwanda · Built with Claude AI (Anthropic)
             </span>
           </div>
-          <div className="flex items-center gap-6 text-xs" style={{ color: '#9CA3AF' }}>
+          <div className="flex items-center gap-6 text-xs" style={{ color: 'var(--text-3)' }}>
             <span>{language === 'rw' ? 'Si isuzuma rya muganga' : 'Not a medical device'}</span>
             <span>·</span>
             <a href="tel:114" className="font-semibold hover:underline" style={{ color: '#E9A720' }}>
