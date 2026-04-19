@@ -156,11 +156,14 @@ export default function ChatScreen() {
   const activeInput = input || (voice.isListening ? voice.interimTranscript : '');
 
   return (
-    <div className="flex flex-col" style={{ height: '100dvh', maxHeight: '100dvh', paddingBottom: '80px' }}>
+    <div className="flex flex-col" style={{ height: '100dvh', maxHeight: '100dvh' }}>
       {/* Header */}
       <div
-        className="px-5 pt-14 pb-4 flex items-center justify-between shrink-0"
-        style={{ background: 'linear-gradient(140deg, #0d2e1c, #1a4731)' }}
+        className="px-5 pb-4 flex items-center justify-between shrink-0"
+        style={{
+          background: 'linear-gradient(140deg, #0d2e1c, #1a4731)',
+          paddingTop: 'max(56px, calc(env(safe-area-inset-top, 0px) + 12px))',
+        }}
       >
         <div className="flex items-center gap-3">
           <motion.div
@@ -333,8 +336,12 @@ export default function ChatScreen() {
 
       {/* Input bar */}
       <div
-        className="shrink-0 px-4 pt-3 pb-4 transition-colors"
-        style={{ background: 'var(--bg-card)', borderTop: '1px solid var(--border-2)' }}
+        className="shrink-0 px-4 pt-3 transition-colors"
+        style={{
+          background: 'var(--bg-card)',
+          borderTop: '1px solid var(--border-2)',
+          paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 80px)',
+        }}
       >
         <div className="flex gap-2.5 items-end">
           {voice.isSupported && (

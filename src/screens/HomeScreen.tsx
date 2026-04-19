@@ -76,11 +76,14 @@ export default function HomeScreen() {
 
   return (
     <>
-      <div className="flex-1 overflow-y-auto" style={{ background: 'var(--bg-app)', paddingBottom: '100px' }}>
+      <div className="flex-1 overflow-y-auto" style={{ background: 'var(--bg-app)', paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 96px)' }}>
         {/* Header */}
         <div
-          className="px-6 pt-14 pb-7 relative overflow-hidden"
-          style={{ background: 'linear-gradient(140deg, #0d2e1c 0%, #1a4731 55%, #2d6a4f 100%)' }}
+          className="px-6 pb-7 relative overflow-hidden"
+          style={{
+            background: 'linear-gradient(140deg, #0d2e1c 0%, #1a4731 55%, #2d6a4f 100%)',
+            paddingTop: 'max(56px, calc(env(safe-area-inset-top, 0px) + 12px))',
+          }}
         >
           <div className="absolute top-0 right-0 w-40 h-40 rounded-full opacity-[0.12]"
             style={{ background: 'radial-gradient(circle, #74C69D, transparent)', transform: 'translate(30%,-30%)' }} />

@@ -59,11 +59,14 @@ export default function BriefScreen() {
   const hasData = week.length >= 3;
 
   return (
-    <div className="flex-1 overflow-y-auto" style={{ background: 'var(--bg-app)', paddingBottom: '90px' }}>
+    <div className="flex-1 overflow-y-auto" style={{ background: 'var(--bg-app)', paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 96px)' }}>
       {/* Header */}
       <div
-        className="px-6 pt-14 pb-6 relative overflow-hidden"
-        style={{ background: 'linear-gradient(140deg, #0d2e1c, #1a4731)' }}
+        className="px-6 pb-6 relative overflow-hidden"
+        style={{
+          background: 'linear-gradient(140deg, #0d2e1c, #1a4731)',
+          paddingTop: 'max(56px, calc(env(safe-area-inset-top, 0px) + 12px))',
+        }}
       >
         <div className="absolute top-0 right-0 w-32 h-32 rounded-full opacity-10"
           style={{ background: 'radial-gradient(circle, #E9A720, transparent)', transform: 'translate(30%, -30%)' }} />

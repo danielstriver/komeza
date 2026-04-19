@@ -108,11 +108,14 @@ export default function InsightsScreen() {
   ];
 
   return (
-    <div className="flex-1 overflow-y-auto" style={{ background: 'var(--bg-app)', paddingBottom: '90px' }}>
+    <div className="flex-1 overflow-y-auto" style={{ background: 'var(--bg-app)', paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 96px)' }}>
       {/* Header */}
       <div
-        className="px-6 pt-14 pb-6"
-        style={{ background: 'linear-gradient(140deg, #0d2e1c, #1a4731)' }}
+        className="px-6 pb-6"
+        style={{
+          background: 'linear-gradient(140deg, #0d2e1c, #1a4731)',
+          paddingTop: 'max(56px, calc(env(safe-area-inset-top, 0px) + 12px))',
+        }}
       >
         <h1 className="text-2xl font-bold mb-1" style={{ color: '#fff' }}>
           {tr.insightsTitle}
@@ -130,18 +133,25 @@ export default function InsightsScreen() {
       ) : (
         <div className="px-4 py-5 space-y-5">
           {/* 7-day stat pills */}
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 gap-3">
             {stats.map((s) => (
               <motion.div
                 key={s.label}
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="rounded-2xl p-3 text-center transition-transform hover:scale-105"
+                className="rounded-2xl p-4 flex items-center gap-3 transition-transform hover:scale-[1.02]"
                 style={{ background: 'var(--bg-card)', boxShadow: 'var(--shadow-card)' }}
               >
-                <div className="text-xl mb-1">{s.emoji}</div>
-                <div className="text-lg font-bold" style={{ color: s.color }}>{s.value}</div>
-                <div className="text-xs mt-0.5" style={{ color: 'var(--text-3)' }}>{s.label}</div>
+                <div
+                  className="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0"
+                  style={{ background: s.color + '18' }}
+                >
+                  {s.emoji}
+                </div>
+                <div>
+                  <div className="text-xl font-bold leading-none" style={{ color: s.color }}>{s.value}</div>
+                  <div className="text-xs mt-1" style={{ color: 'var(--text-3)' }}>{s.label}</div>
+                </div>
               </motion.div>
             ))}
           </div>

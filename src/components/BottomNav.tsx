@@ -22,8 +22,12 @@ export default function BottomNav() {
   return (
     /* Hidden on md+ — desktop users navigate via the top navbar */
     <div
-      className="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 md:hidden"
-      style={{ width: 'calc(100% - 32px)', maxWidth: 380 }}
+      className="fixed left-1/2 -translate-x-1/2 z-50 md:hidden"
+      style={{
+        bottom: 'max(20px, calc(env(safe-area-inset-bottom, 0px) + 8px))',
+        width: 'calc(100% - 32px)',
+        maxWidth: 380,
+      }}
     >
       <div
         className="flex items-center justify-around px-2 py-2 rounded-[28px]"
