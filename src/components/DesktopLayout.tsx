@@ -1,0 +1,266 @@
+import { motion } from 'framer-motion';
+import { useApp } from '../context/AppContext';
+import { t } from '../lib/i18n';
+
+const FEATURES = [
+  {
+    emoji: '🫂',
+    en: 'No mental health labels — start with how your body feels',
+    rw: 'Nta majambo y\'ubuzima bwo mu mutwe — tangira uko umubiri wumva',
+  },
+  {
+    emoji: '🤖',
+    en: 'Claude AI listens in English & Kinyarwanda',
+    rw: 'Claude AI iumva mu Cyongereza no mu Kinyarwanda',
+  },
+  {
+    emoji: '📊',
+    en: 'Spot patterns in your energy, sleep, and mood over time',
+    rw: 'Reba imiterere y\'imbaraga, itiro, n\'umutima wawe',
+  },
+  {
+    emoji: '🔒',
+    en: 'Data stays on your device — nothing sent without your knowledge',
+    rw: 'Amakuru asigara ku gikoresho cyawe gusa',
+  },
+];
+
+export default function DesktopLayout({ children }: { children: React.ReactNode }) {
+  const { state, dispatch } = useApp();
+  const { language, screen } = state;
+  const tr = t[language];
+
+  return (
+    <div className="min-h-screen flex flex-col" style={{ background: '#EAE6DF' }}>
+      {/* === DESKTOP NAVBAR === */}
+      <header
+        className="hidden md:flex items-center justify-between px-10 py-4 sticky top-0 z-50"
+        style={{
+          background: 'rgba(255,255,255,0.9)',
+          backdropFilter: 'blur(20px)',
+          borderBottom: '1px solid rgba(0,0,0,0.07)',
+          boxShadow: '0 1px 20px rgba(0,0,0,0.06)',
+        }}
+      >
+        {/* Logo */}
+        <button
+          onClick={() => dispatch({ type: 'SET_SCREEN', payload: 'home' })}
+          className="flex items-center gap-3 group"
+        >
+          <div
+            className="w-9 h-9 rounded-xl flex items-center justify-center text-lg font-black transition-transform group-hover:scale-105"
+            style={{ background: 'linear-gradient(135deg, #1a4731, #2d6a4f)', color: '#E9A720' }}
+          >
+            K
+          </div>
+          <div className="leading-tight">
+            <span className="text-base font-black tracking-tight" style={{ color: '#1a4731' }}>KOMEZA</span>
+            <span className="hidden lg:block text-[10px] font-medium" style={{ color: '#74C69D' }}>
+              Persist · Continue · Thrive
+            </span>
+          </div>
+        </button>
+
+        {/* Nav links */}
+        <nav className="hidden lg:flex items-center gap-1">
+          {[
+            { label: language === 'rw' ? 'Genzura' : 'Check-In',  scr: 'home'     as const },
+            { label: language === 'rw' ? 'Ikiganiro' : 'Chat',    scr: 'chat'     as const },
+            { label: language === 'rw' ? 'Imiterere' : 'Insights',scr: 'insights' as const },
+            { label: language === 'rw' ? 'Raporo' : 'Report',     scr: 'brief'    as const },
+          ].map((item) => (
+            <button
+              key={item.scr}
+              onClick={() => dispatch({ type: 'SET_SCREEN', payload: item.scr })}
+              className="px-4 py-2 rounded-xl text-sm font-semibold transition-all"
+              style={{
+                background: screen === item.scr ? '#1a473115' : 'transparent',
+                color: screen === item.scr ? '#1a4731' : '#6B7575',
+              }}
+            >
+              {item.label}
+            </button>
+          ))}
+        </nav>
+
+        {/* Right controls */}
+        <div className="flex items-center gap-3">
+          {/* Crisis line */}
+          <a
+            href="tel:114"
+            className="hidden lg:flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold transition-all hover:scale-105"
+            style={{ background: '#FFF4E6', color: '#C05621', border: '1px solid #FECBA150' }}
+          >
+            <span>🆘</span>
+            <span>{language === 'rw' ? 'Ubufasha vuba: 114' : 'Crisis line: 114'}</span>
+          </a>
+
+          {/* Language toggle */}
+          <button
+            onClick={() => dispatch({ type: 'SET_LANGUAGE', payload: language === 'en' ? 'rw' : 'en' })}
+            className="flex items-center gap-2 px-3 py-2 rounded-xl text-sm font-semibold transition-all hover:scale-105"
+            style={{ background: '#F7F4EF', color: '#1a4731', border: '1px solid #E5DDD4' }}
+          >
+            <span>{language === 'en' ? '🇷🇼' : '🇬🇧'}</span>
+            <span>{language === 'en' ? 'RW' : 'EN'}</span>
+          </button>
+        </div>
+      </header>
+
+      {/* === MAIN CONTENT AREA === */}
+      <main className="flex-1 flex items-start justify-center md:py-8 md:px-6 lg:px-12 relative">
+
+        {/* Left info panel — desktop only */}
+        <motion.aside
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+          className="hidden lg:flex flex-col gap-6 pt-4 mr-8 max-w-xs"
+          style={{ width: 260 }}
+        >
+          {/* Tagline card */}
+          <div
+            className="rounded-3xl p-6"
+            style={{ background: 'linear-gradient(140deg, #0d2e1c, #1a4731)', color: '#fff' }}
+          >
+            <div className="text-3xl font-black mb-1" style={{ color: '#E9A720' }}>KOMEZA</div>
+            <p className="text-sm leading-relaxed mb-4" style={{ color: 'rgba(255,255,255,0.75)' }}>
+              {language === 'rw'
+                ? 'Ubufasha mu buzima bwiza bw\'umuturage wo mu Rwanda — bwifashishije AI, nta matiku, nta bwoba.'
+                : 'AI-powered wellness for Rwandan youth — meeting you through how your body feels, not clinical labels.'}
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {['Rwanda', 'Claude AI', 'Kinyarwanda'].map((tag) => (
+                <span key={tag} className="px-2 py-1 rounded-lg text-xs font-semibold" style={{ background: 'rgba(255,255,255,0.1)', color: '#74C69D' }}>{tag}</span>
+              ))}
+            </div>
+          </div>
+
+          {/* Features list */}
+          <div className="rounded-3xl p-5" style={{ background: '#fff', boxShadow: '0 2px 20px rgba(0,0,0,0.06)' }}>
+            <p className="text-xs font-bold uppercase tracking-wider mb-4" style={{ color: '#9CA3AF' }}>
+              {language === 'rw' ? 'Ibintu bishimishije' : 'Why it works'}
+            </p>
+            <div className="space-y-4">
+              {FEATURES.map((f, i) => (
+                <div key={i} className="flex gap-3 items-start">
+                  <span className="text-lg mt-0.5">{f.emoji}</span>
+                  <p className="text-xs leading-relaxed" style={{ color: '#4B5563' }}>
+                    {language === 'rw' ? f.rw : f.en}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Stats */}
+          <div className="rounded-3xl p-5" style={{ background: '#fff', boxShadow: '0 2px 20px rgba(0,0,0,0.06)' }}>
+            <p className="text-xs font-bold uppercase tracking-wider mb-4" style={{ color: '#9CA3AF' }}>
+              {language === 'rw' ? 'Ikibazo cyacu' : 'The gap we bridge'}
+            </p>
+            <div className="space-y-3">
+              {[
+                { val: '1:800k', label: language === 'rw' ? 'Inzobere kuri buri muturage' : 'Psychiatrist per capita' },
+                { val: '74%',   label: language === 'rw' ? 'Rubyiruko rudakizi serivisi' : 'Youth unaware of services' },
+                { val: '6×',    label: language === 'rw' ? 'Banyarwa bita app kuruta kliniki' : 'Prefer app over clinic' },
+              ].map((s) => (
+                <div key={s.val} className="flex items-center justify-between">
+                  <span className="text-xl font-black" style={{ color: '#E9A720' }}>{s.val}</span>
+                  <span className="text-xs text-right ml-3" style={{ color: '#6B7575', maxWidth: 130 }}>{s.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </motion.aside>
+
+        {/* === APP FRAME === */}
+        <div
+          className="w-full md:rounded-[40px] md:overflow-hidden flex flex-col"
+          style={{
+            maxWidth: 430,
+            minHeight: '100dvh',
+            background: '#F7F4EF',
+            boxShadow: '0 0 0 1px rgba(0,0,0,0.04), 0 24px 80px rgba(0,0,0,0.18)',
+          }}
+        >
+          {children}
+        </div>
+
+        {/* Right info panel — desktop only */}
+        <motion.aside
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+          className="hidden lg:flex flex-col gap-6 pt-4 ml-8"
+          style={{ width: 220 }}
+        >
+          {/* Crisis CTA */}
+          <a
+            href="tel:114"
+            className="block rounded-3xl p-5 text-center transition-transform hover:scale-[1.02]"
+            style={{ background: 'linear-gradient(135deg, #7F1D1D, #B91C1C)', boxShadow: '0 8px 32px rgba(127,29,29,0.35)' }}
+          >
+            <div className="text-3xl mb-2">📞</div>
+            <div className="text-2xl font-black text-white mb-1">114</div>
+            <div className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.75)' }}>
+              {language === 'rw' ? 'Inzira y\'ubufasha buntu, amasaha 24/7' : 'Free crisis line, 24/7'}
+            </div>
+          </a>
+
+          {/* Privacy card */}
+          <div className="rounded-3xl p-5" style={{ background: '#fff', boxShadow: '0 2px 20px rgba(0,0,0,0.06)' }}>
+            <p className="text-xs font-bold uppercase tracking-wider mb-4" style={{ color: '#9CA3AF' }}>
+              {language === 'rw' ? 'Ubwisanzure & umutekano' : 'Privacy & safety'}
+            </p>
+            <div className="space-y-3 text-xs" style={{ color: '#4B5563' }}>
+              {[
+                { icon: '🔒', text: language === 'rw' ? 'Amakuru ku gikoresho cyawe gusa' : 'Data stays on your device' },
+                { icon: '🚫', text: language === 'rw' ? 'Nta isuzuma rya muganga' : 'No medical diagnosis' },
+                { icon: '🛡️', text: language === 'rw' ? 'Umurongo wa 114 ubikwa hejuru' : 'Crisis line always visible' },
+                { icon: '✅', text: language === 'rw' ? 'Yubahiriza umuco w\'u Rwanda' : 'Culturally designed for Rwanda' },
+              ].map((item) => (
+                <div key={item.text} className="flex gap-2 items-start">
+                  <span>{item.icon}</span>
+                  <span className="leading-relaxed">{item.text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Built with badge */}
+          <div className="rounded-2xl px-4 py-3 text-center" style={{ background: 'rgba(255,255,255,0.6)', border: '1px solid rgba(0,0,0,0.07)' }}>
+            <p className="text-xs" style={{ color: '#9CA3AF' }}>
+              {language === 'rw' ? 'Yakozwe na' : 'Powered by'}
+            </p>
+            <p className="text-sm font-bold mt-1" style={{ color: '#1a4731' }}>Claude AI · Anthropic</p>
+            <p className="text-xs mt-1" style={{ color: '#9CA3AF' }}>Rwanda Hackathon 2025</p>
+          </div>
+        </motion.aside>
+      </main>
+
+      {/* === DESKTOP FOOTER === */}
+      <footer
+        className="hidden md:block px-10 py-6"
+        style={{ borderTop: '1px solid rgba(0,0,0,0.07)', background: 'rgba(255,255,255,0.6)' }}
+      >
+        <div className="flex items-center justify-between max-w-6xl mx-auto">
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-black" style={{ color: '#1a4731' }}>KOMEZA</span>
+            <span className="text-xs" style={{ color: '#9CA3AF' }}>
+              © 2025 · AI Mental Wellness for Rwanda · Built with Claude AI (Anthropic)
+            </span>
+          </div>
+          <div className="flex items-center gap-6 text-xs" style={{ color: '#9CA3AF' }}>
+            <span>{language === 'rw' ? 'Si isuzuma rya muganga' : 'Not a medical device'}</span>
+            <span>·</span>
+            <a href="tel:114" className="font-semibold hover:underline" style={{ color: '#E9A720' }}>
+              {language === 'rw' ? '🆘 Ubufasha: 114' : '🆘 Crisis line: 114'}
+            </a>
+            <span>·</span>
+            <span>Rwanda Hackathon 2025</span>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
