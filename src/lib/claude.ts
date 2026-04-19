@@ -6,22 +6,22 @@ function buildCheckInContext(ratings: Partial<SomaticRatings>, lang: Language): 
 
   const labels = lang === 'rw'
     ? { energy: 'Imbaraga', sleep: 'Itiro', mood: 'Umutima', bodyPain: 'Ububabare' }
-    : { energy: 'Energy', sleep: 'Sleep', mood: 'Mood', bodyPain: 'Body Pain' };
+    : { energy: 'Energy', sleep: 'Sleep', mood: 'Mood', bodyPain: 'Body discomfort' };
 
   const parts: string[] = [];
   if (ratings.energy !== undefined) parts.push(`${labels.energy}: ${ratings.energy}/5`);
   if (ratings.sleep !== undefined) parts.push(`${labels.sleep}: ${ratings.sleep}/5`);
   if (ratings.mood !== undefined) parts.push(`${labels.mood}: ${ratings.mood}/5`);
-  if (ratings.bodyPain !== undefined) parts.push(`${labels.bodyPain}: ${ratings.bodyPain}/5 (higher = more pain)`);
+  if (ratings.bodyPain !== undefined) parts.push(`${labels.bodyPain}: ${ratings.bodyPain}/5 (higher = more discomfort)`);
 
-  return `\n\n[Today's check-in: ${parts.join(', ')}]`;
+  return parts.join(', ');
 }
 
 const DEMO_RESPONSES = [
-  "Thank you for checking in today. Based on how you have described your energy and sleep, it sounds like your body may be carrying some extra weight lately. What has been on your mind most this week?",
+  "Thank you for checking in today. It sounds like your body may be carrying some extra weight lately. What has been on your mind most this week?",
   "I hear you. That kind of tiredness often comes from more than just the body — sometimes the mind is working hard too. Has anything at school, work, or home been feeling heavy recently?",
   "That makes a lot of sense. It is not easy to carry that. You have taken a good step by sharing — Komeza means to keep going, and that is exactly what you are doing. Would it help to think through one small thing you could do for yourself today?",
-  "Thank you for trusting me with that. When you notice that fatigue coming on, does it usually happen at a particular time of day, or is it more constant throughout?",
+  "Thank you for trusting me with that. When you notice that feeling coming on, does it usually happen at a particular time of day, or is it more constant throughout?",
   "You are doing well by paying attention to how your body feels — that awareness is a real strength. Remember, if things ever feel too heavy to carry alone, the 114 hotline is free and available day and night. You are not alone in this.",
 ];
 
@@ -34,8 +34,6 @@ export async function sendMessage(
   currentRatings: Partial<SomaticRatings>,
   language: Language
 ): Promise<string> {
-  const checkInContext = buildCheckInContext(currentRatings, language);
-
   if (IS_DEMO) {
     await new Promise((r) => setTimeout(r, 1200 + Math.random() * 800));
     const response = DEMO_RESPONSES[demoIndex % DEMO_RESPONSES.length];
@@ -48,18 +46,13 @@ export async function sendMessage(
     content: m.content,
   }));
 
-  // Inject check-in context into the last user message
-  if (apiMessages.length > 0 && apiMessages[apiMessages.length - 1].role === 'user') {
-    apiMessages[apiMessages.length - 1] = {
-      ...apiMessages[apiMessages.length - 1],
-      content: apiMessages[apiMessages.length - 1].content + checkInContext,
-    };
-  }
-
   const response = await fetch('/api/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ messages: apiMessages }),
+    body: JSON.stringify({
+      messages: apiMessages,
+      checkInContext: buildCheckInContext(currentRatings, language),
+    }),
   });
 
   if (!response.ok) {
@@ -88,7 +81,7 @@ export function getOpeningMessage(
   const energyNote = ratings.energy && ratings.energy <= 2
     ? 'I can see your energy is lower today. '
     : ratings.energy && ratings.energy >= 4
-    ? "It looks like you are feeling energised today. "
+    ? 'It looks like you are feeling energised today. '
     : '';
 
   const painNote = ratings.bodyPain && ratings.bodyPain >= 4

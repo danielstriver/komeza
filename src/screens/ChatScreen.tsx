@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '../context/AppContext';
 import { t } from '../lib/i18n';
-import { sendMessage, getOpeningMessage, IS_DEMO } from '../lib/claude';
+import { sendMessage, getOpeningMessage } from '../lib/claude';
 import { detectCrisis } from '../lib/crisis';
 import { useVoice, speak, stopSpeaking } from '../hooks/useVoice';
 import type { ChatMessage } from '../types';
@@ -168,10 +168,10 @@ export default function ChatScreen() {
           <motion.div
             animate={isLoading ? { rotate: [0, 15, -15, 0] } : {}}
             transition={{ duration: 1.5, repeat: isLoading ? Infinity : 0 }}
-            className="w-10 h-10 rounded-2xl flex items-center justify-center text-xl shrink-0"
-            style={{ background: 'rgba(233,167,32,0.2)' }}
+            className="w-10 h-10 rounded-2xl overflow-hidden shrink-0"
+            style={{ background: '#fff' }}
           >
-            🌿
+            <img src="/images/logo.png" alt="Komeza" className="w-full h-full object-contain p-1" />
           </motion.div>
           <div>
             <p className="font-bold text-sm" style={{ color: '#fff' }}>{tr.chatTitle}</p>
@@ -210,17 +210,6 @@ export default function ChatScreen() {
         </div>
       </div>
 
-      {/* Demo mode banner */}
-      {IS_DEMO && (
-        <motion.div
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="mx-4 mt-3 px-4 py-2.5 rounded-xl text-xs text-center shrink-0"
-          style={{ background: '#FFF9E6', border: '1px solid #E9A72040', color: '#92600A' }}
-        >
-          🔑 {language === 'rw' ? 'Demo mode — ongera VITE_ANTHROPIC_API_KEY kugirango ukoreshe Claude AI nyayo' : 'Demo mode — add VITE_ANTHROPIC_API_KEY for real Claude AI'}
-        </motion.div>
-      )}
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-5 space-y-4" style={{ background: 'var(--bg-app)' }}>

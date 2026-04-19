@@ -32,20 +32,9 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
           {/* Logo */}
           <button
             onClick={() => dispatch({ type: 'SET_SCREEN', payload: 'home' })}
-            className="flex items-center gap-3 group"
+            className="flex items-center gap-2 group transition-transform hover:scale-105"
           >
-            <div
-              className="w-9 h-9 rounded-xl flex items-center justify-center text-lg font-black transition-transform group-hover:scale-105"
-              style={{ background: 'linear-gradient(135deg, #1a4731, #2d6a4f)', color: '#E9A720' }}
-            >
-              K
-            </div>
-            <div className="leading-tight">
-              <span className="text-base font-black tracking-tight" style={{ color: 'var(--brand-text)' }}>KOMEZA</span>
-              <span className="hidden lg:block text-[10px] font-medium" style={{ color: '#74C69D' }}>
-                Persist · Continue · Thrive
-              </span>
-            </div>
+            <img src="/images/logo.png" alt="Komeza" className="h-9 w-auto object-contain" />
           </button>
 
           {/* Nav links */}
@@ -131,7 +120,7 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
               className="rounded-3xl p-6"
               style={{ background: 'linear-gradient(140deg, #0d2e1c, #1a4731)' }}
             >
-              <div className="text-3xl font-black mb-1" style={{ color: '#E9A720' }}>KOMEZA</div>
+              <img src="/images/logo.png" alt="Komeza" className="h-10 w-auto object-contain mb-3 rounded-xl" style={{ background: 'rgba(255,255,255,0.92)', padding: '4px 8px' }} />
               <p className="text-sm leading-relaxed mb-4" style={{ color: 'rgba(255,255,255,0.75)' }}>
                 {language === 'rw'
                   ? 'Ubufasha mu buzima bwiza bw\'umuturage wo mu Rwanda — bwifashishije AI, nta matiku, nta bwoba.'
@@ -262,7 +251,7 @@ export default function DesktopLayout({ children }: { children: React.ReactNode 
         >
           <div className="flex items-center justify-between max-w-6xl mx-auto">
             <div className="flex items-center gap-3">
-              <span className="text-sm font-black" style={{ color: 'var(--brand-text)' }}>KOMEZA</span>
+              <img src="/images/logo.png" alt="Komeza" className="h-7 w-auto object-contain" />
               <span className="text-xs" style={{ color: 'var(--text-3)' }}>
                 © 2025 · AI Mental Wellness for Rwanda · Built with Claude AI (Anthropic)
               </span>
