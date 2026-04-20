@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '../context/AppContext';
+import { useAuth } from '../context/AuthContext';
+import { FIREBASE_CONFIGURED } from '../lib/firebase';
 import { t } from '../lib/i18n';
 import HowItWorksModal from '../components/HowItWorksModal';
 import type { SomaticRatings } from '../types';
@@ -56,6 +58,7 @@ const DOT_LABELS = [1, 2, 3, 4, 5];
 
 export default function HomeScreen() {
   const { state, dispatch } = useApp();
+  const { user, signOut } = useAuth();
   const { language, currentRatings, entries, darkMode } = state;
   const tr = t[language];
   const [howItWorksOpen, setHowItWorksOpen] = useState(false);
@@ -103,6 +106,28 @@ export default function HomeScreen() {
                 >
                   <span className="text-base leading-none">{darkMode ? '☀️' : '🌙'}</span>
                 </button>
+
+                {/* User avatar + sign-out — mobile only, shown when Firebase auth is active */}
+                {FIREBASE_CONFIGURED && user && (
+                  <button
+                    onClick={signOut}
+                    className="md:hidden flex items-center gap-1.5 pl-0.5 pr-2.5 py-0.5 rounded-full transition-all hover:scale-105 active:scale-95"
+                    style={{ background: 'rgba(255,255,255,0.12)' }}
+                    title={language === 'rw' ? 'Sohoka' : 'Sign out'}
+                  >
+                    {user.photoURL ? (
+                      <img src={user.photoURL} alt="" className="w-7 h-7 rounded-full object-cover" />
+                    ) : (
+                      <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold"
+                        style={{ background: 'rgba(255,255,255,0.25)', color: '#fff' }}>
+                        {(user.displayName ?? user.email ?? 'U')[0].toUpperCase()}
+                      </div>
+                    )}
+                    <span className="text-xs font-semibold" style={{ color: 'rgba(255,255,255,0.8)' }}>
+                      {language === 'rw' ? 'Sohoka' : 'Sign out'}
+                    </span>
+                  </button>
+                )}
 
                 {/* Streak badge */}
                 {streak > 0 && (
