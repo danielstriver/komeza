@@ -118,13 +118,13 @@ export default function HowItWorksModal({ open, onClose, language }: Props) {
             style={{ background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)' }}
           />
 
-          {/* Desktop: centered modal */}
+          {/* Centered modal — all screen sizes */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: -10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ type: 'spring', stiffness: 340, damping: 32 }}
-            className="fixed inset-0 z-[60] hidden md:flex items-center justify-center p-6 pointer-events-none"
+            className="fixed inset-0 z-[60] flex items-center justify-center p-6 pointer-events-none"
           >
             <div
               className="w-full max-w-md rounded-3xl overflow-hidden pointer-events-auto"
@@ -132,22 +132,6 @@ export default function HowItWorksModal({ open, onClose, language }: Props) {
             >
               {content}
             </div>
-          </motion.div>
-
-          {/* Mobile: bottom sheet */}
-          <motion.div
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            exit={{ y: '100%' }}
-            transition={{ type: 'spring', stiffness: 320, damping: 34 }}
-            className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full z-[60] rounded-t-[32px] overflow-hidden md:hidden"
-            style={{ maxWidth: 430, background: 'var(--bg-card)', boxShadow: '0 -8px 40px rgba(0,0,0,0.2)' }}
-          >
-            {/* Drag handle */}
-            <div className="flex justify-center pt-4 pb-1">
-              <div className="w-10 h-1 rounded-full" style={{ background: 'var(--border-1)' }} />
-            </div>
-            {content}
           </motion.div>
         </>
       )}
